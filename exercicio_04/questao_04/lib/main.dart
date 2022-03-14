@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
             left: -50,
             child: Image(
               image: AssetImage('images/design.png'),
-              height: 125,
+              height: 140,
               repeat: ImageRepeat.repeatX,
               color: Color.fromRGBO(89, 36, 107, 1),
             ),
@@ -29,40 +29,40 @@ class MyApp extends StatelessWidget {
           Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               const CircleAvatar(
-                radius: 90,
+                radius: 120,
                 backgroundImage: AssetImage('images/emanuel.jpg'),
               ),
-              const SizedBox(height: 90),
+              const SizedBox(height: 40),
               Wrap(
                 spacing: 50,
-                runSpacing: 20,
+                runSpacing: 30,
                 alignment: WrapAlignment.center,
                 children: [
                   buildIcon(
                     Icons.facebook,
-                    80,
+                    70,
                   ),
                   buildIcon(
                     MediaIcon.instagram,
-                    80,
+                    70,
                   ),
                   buildIcon(
                     MediaIcon.github,
-                    80,
+                    70,
                   ),
                   buildIcon(
                     Icons.message,
-                    80,
+                    70,
                   ),
                   buildIcon(
                     Icons.whatsapp,
-                    80,
+                    70,
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               const SizedBox(
                 width: 200,
                 height: 60,
@@ -78,13 +78,13 @@ class MyApp extends StatelessWidget {
               const SizedBox(height: 5),
               const Text(
                 "Flutter Developer",
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                style: TextStyle(color: Colors.white, fontSize: 18),
               )
             ]),
           ),
           const Positioned(
-            top: 150,
-            right: -50,
+            top: 180,
+            right: -80,
             child: Image(
               image: AssetImage('images/design.png'),
               height: 125,

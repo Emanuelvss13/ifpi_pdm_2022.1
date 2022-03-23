@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+late SharedPreferences prefs;
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  prefs = await SharedPreferences.getInstance();
+
   runApp(MaterialApp(
     home: Scaffold(
       appBar: AppBar(
@@ -11,9 +17,6 @@ void main() {
     ),
   ));
 }
-
-//DB
-List<bool> likes = [false, false, false, false, false];
 
 class Control extends StatefulWidget {
   const Control({Key? key}) : super(key: key);
@@ -88,18 +91,19 @@ class One extends StatefulWidget {
 }
 
 class _OneState extends State<One> {
-  bool _like = likes[0];
+  bool _like = prefs.getBool("1")!;
 
-  void changeLike() {
+  void _changeLike(String number) async {
     setState(() {
-      _like = !likes[0];
-      likes[0] = _like;
+      _like = !_like;
     });
+
+    await prefs.setBool("1", _like);
   }
 
   @override
   Widget build(BuildContext context) {
-    return heart(changeLike, _like, 1);
+    return heart(_changeLike, _like, "1");
   }
 }
 
@@ -111,18 +115,19 @@ class Two extends StatefulWidget {
 }
 
 class _TwoState extends State<Two> {
-  bool _like = likes[1];
+  bool _like = prefs.getBool("2")!;
 
-  void changeLike() {
+  void _changeLike(String number) async {
     setState(() {
-      _like = !likes[1];
-      likes[1] = _like;
+      _like = !_like;
     });
+
+    await prefs.setBool("2", _like);
   }
 
   @override
   Widget build(BuildContext context) {
-    return heart(changeLike, _like, 2);
+    return heart(_changeLike, _like, "2");
   }
 }
 
@@ -134,18 +139,19 @@ class Three extends StatefulWidget {
 }
 
 class _ThreeState extends State<Three> {
-  bool _like = likes[2];
+  bool _like = prefs.getBool("3")!;
 
-  void changeLike() {
+  void _changeLike(String number) async {
     setState(() {
-      _like = !likes[2];
-      likes[2] = _like;
+      _like = !_like;
     });
+
+    await prefs.setBool("3", _like);
   }
 
   @override
   Widget build(BuildContext context) {
-    return heart(changeLike, _like, 3);
+    return heart(_changeLike, _like, "3");
   }
 }
 
@@ -157,18 +163,19 @@ class Four extends StatefulWidget {
 }
 
 class _FourState extends State<Four> {
-  bool _like = likes[3];
+  bool _like = prefs.getBool("4")!;
 
-  void changeLike() {
+  void _changeLike(String number) async {
     setState(() {
-      _like = !likes[3];
-      likes[3] = _like;
+      _like = !_like;
     });
+
+    await prefs.setBool("4", _like);
   }
 
   @override
   Widget build(BuildContext context) {
-    return heart(changeLike, _like, 4);
+    return heart(_changeLike, _like, "4");
   }
 }
 
@@ -180,32 +187,33 @@ class Five extends StatefulWidget {
 }
 
 class _FiveState extends State<Five> {
-  bool _like = likes[4];
+  bool _like = prefs.getBool("5")!;
 
-  void changeLike() {
+  void _changeLike(String number) async {
     setState(() {
-      _like = !likes[4];
-      likes[4] = _like;
+      _like = !_like;
     });
+
+    await prefs.setBool("5", _like);
   }
 
   @override
   Widget build(BuildContext context) {
-    return heart(changeLike, _like, 5);
+    return heart(_changeLike, _like, "5");
   }
 }
 
-Center heart(Function changeLike, bool like, int number) {
+Center heart(Function changeLike, bool like, String number) {
   return Center(
     child: Column(
       children: [
         TextButton(
             onPressed: () {
-              changeLike();
+              changeLike(number);
             },
             child: image(like)),
         Text(
-          number.toString(),
+          number,
           style: const TextStyle(fontSize: 40),
         )
       ],

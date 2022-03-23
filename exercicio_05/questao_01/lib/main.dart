@@ -28,8 +28,16 @@ class _DiceeState extends State<Dicee> {
 
   void changeDiceState() {
     setState(() {
-      leftDiceNumber = Random().nextInt(6) + 1;
-      rightDiceNumber = Random().nextInt(6) + 1;
+      int n1 = Random().nextInt(8) + 1;
+      int n2 = Random().nextInt(8) + 1;
+
+      while (n1 == n2) {
+        n1 = Random().nextInt(8) + 1;
+        n2 = Random().nextInt(8) + 1;
+      }
+
+      leftDiceNumber = n1;
+      rightDiceNumber = n2;
     });
   }
 
@@ -43,13 +51,13 @@ class _DiceeState extends State<Dicee> {
                   onPressed: () {
                     changeDiceState();
                   },
-                  child: Image.asset("images/dice$leftDiceNumber.png"))),
+                  child: Image.asset("images/octaedro$leftDiceNumber.png"))),
           Expanded(
               child: TextButton(
                   onPressed: () {
                     changeDiceState();
                   },
-                  child: Image.asset("images/dice$rightDiceNumber.png")))
+                  child: Image.asset("images/octaedro$rightDiceNumber.png")))
         ],
       ),
     );

@@ -39,6 +39,24 @@ class _QuizPageState extends State<QuizPage> {
     int correctAnswer = quizBrain.getCorrectAnswer();
 
     setState(() {
+      if (userPickedAnswer == 3) {
+        scoreKeeper.add(const Icon(
+          Icons.warning,
+          color: Color.fromRGBO(255, 218, 185, 1),
+        ));
+      } else if (userPickedAnswer == correctAnswer) {
+        scoreKeeper.add(const Icon(
+          Icons.check,
+          color: Color.fromRGBO(76, 175, 80, 1),
+        ));
+        score++;
+      } else if (userPickedAnswer != correctAnswer) {
+        scoreKeeper.add(const Icon(
+          Icons.close,
+          color: Color.fromRGBO(244, 67, 54, 1),
+        ));
+      }
+
       if (quizBrain.isFinished()) {
         showModalBottomSheet<void>(
           context: context,
@@ -88,23 +106,6 @@ class _QuizPageState extends State<QuizPage> {
           },
         );
       } else {
-        if (userPickedAnswer == 3) {
-          scoreKeeper.add(const Icon(
-            Icons.warning,
-            color: Color.fromRGBO(255, 218, 185, 1),
-          ));
-        } else if (userPickedAnswer == correctAnswer) {
-          scoreKeeper.add(const Icon(
-            Icons.check,
-            color: Color.fromRGBO(76, 175, 80, 1),
-          ));
-          score++;
-        } else if (userPickedAnswer != correctAnswer) {
-          scoreKeeper.add(const Icon(
-            Icons.close,
-            color: Color.fromRGBO(244, 67, 54, 1),
-          ));
-        }
         quizBrain.nextQuestion();
       }
     });

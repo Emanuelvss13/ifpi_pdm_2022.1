@@ -34,80 +34,50 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
   int score = 0;
+  double percent = 0;
 
   void checkAnswer(int userPickedAnswer) {
     int correctAnswer = quizBrain.getCorrectAnswer();
 
     setState(() {
-      if (userPickedAnswer == 3) {
-        scoreKeeper.add(const Icon(
-          Icons.warning,
-          color: Color.fromRGBO(255, 218, 185, 1),
-        ));
-      } else if (userPickedAnswer == correctAnswer) {
-        scoreKeeper.add(const Icon(
-          Icons.check,
-          color: Color.fromRGBO(76, 175, 80, 1),
-        ));
-        score++;
-      } else if (userPickedAnswer != correctAnswer) {
-        scoreKeeper.add(const Icon(
-          Icons.close,
-          color: Color.fromRGBO(244, 67, 54, 1),
-        ));
-      }
-
       if (quizBrain.isFinished()) {
-        showModalBottomSheet<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return Container(
-              height: 300,
-              color: const Color.fromRGBO(45, 46, 46, 1),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text('$score/13',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 40)),
-                    const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Text('Quiz concluído!',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          )),
-                    ),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                              const EdgeInsets.all(20)),
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.green)),
-                      child: const Text(
-                        'Recomeçar',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      onPressed: (() => {
-                            Navigator.pop(context),
-                            setState(() {
-                              quizBrain.reset();
-                              scoreKeeper = [];
-                              score = 0;
-                            })
-                          }),
-                    )
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text('Acertou $percent%'),
+          action: SnackBarAction(
+            label: 'Reiniciar',
+            onPressed: () {
+              setState(() {
+                quizBrain.reset();
+                scoreKeeper = [];
+                score = 0;
+                percent = 0;
+              });
+            },
+          ),
+        ));
       } else {
+        if (userPickedAnswer == 3) {
+          scoreKeeper.add(const Icon(
+            Icons.warning,
+            color: Color.fromRGBO(255, 218, 185, 1),
+          ));
+        } else if (userPickedAnswer == correctAnswer) {
+          scoreKeeper.add(const Icon(
+            Icons.check,
+            color: Color.fromRGBO(76, 175, 80, 1),
+          ));
+          score++;
+        } else if (userPickedAnswer != correctAnswer) {
+          scoreKeeper.add(const Icon(
+            Icons.close,
+            color: Color.fromRGBO(244, 67, 54, 1),
+          ));
+        }
         quizBrain.nextQuestion();
       }
+
+      percent = (scoreKeeper.isEmpty ? 0 : (score / scoreKeeper.length) * 100)
+          .round() as double;
     });
   }
 
@@ -117,6 +87,10 @@ class _QuizPageState extends State<QuizPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
+        Text(
+          "$percent%",
+          style: const TextStyle(color: Colors.white),
+        ),
         Expanded(
           flex: 5,
           child: Padding(

@@ -3,7 +3,11 @@ import 'quiz_brain.dart';
 
 QuizBrain quizBrain = QuizBrain();
 
-void main() => runApp(const Quizzler());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await quizBrain.initializaDB();
+  runApp(const Quizzler());
+}
 
 class Quizzler extends StatelessWidget {
   const Quizzler({Key? key}) : super(key: key);

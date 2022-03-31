@@ -47,8 +47,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
-                      child:
-                          ListTile(title: Text(snapshot.data![index].title)));
+                      child: ListTile(
+                    title: Text(snapshot.data![index].title),
+                    onTap: () {
+                      if (snapshot.hasData) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('álbum ' +
+                              snapshot.data![index].title +
+                              ' clicado'),
+                          duration: const Duration(milliseconds: 750),
+                        ));
+                      }
+                    },
+                  ));
                 });
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');

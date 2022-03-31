@@ -16,61 +16,52 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fetch Album',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
-      home: const MyHomePage(title: 'Fetch Album'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<Album> futureAlbum;
-
-  @override
-  void initState() {
-    super.initState();
-    futureAlbum = fetchAlbum();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text("Album"),
       ),
       body: Center(
-        child: Column(
-          children: [
-            FutureBuilder<Album>(
-              future: futureAlbum,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(snapshot.data!.title);
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
+          child: FutureBuilder<List>(
+        future: fetchAlbuns(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                      child:
+                          ListTile(title: Text(snapshot.data![index].title)));
+                });
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
 
-                // By default, show a loading spinner.
-                return const CircularProgressIndicator();
-              },
-            )
-          ],
-        ),
-      ),
+          return const Center(child: CircularProgressIndicator());
+        },
+      )),
     );
   }
 }
 
-Future<Album> fetchAlbum() async {
+Future<dynamic> fetchAlbum() async {
   final response = await http
       .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
 
@@ -79,4 +70,15 @@ Future<Album> fetchAlbum() async {
   }
 
   return Album.fromJson(jsonDecode(response.body));
+}
+
+Future<List> fetchAlbuns() async {
+  final response =
+      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums'));
+
+  if (response.statusCode != 200) {
+    throw Exception('Failed to load album');
+  }
+
+  return jsonDecode(response.body).map((e) => Album.fromJson(e)).toList();
 }

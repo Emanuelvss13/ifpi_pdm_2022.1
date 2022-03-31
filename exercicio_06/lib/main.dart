@@ -5,7 +5,7 @@ QuizBrain quizBrain = QuizBrain();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await quizBrain.initializaDB();
+  await quizBrain.initializeDB();
   runApp(const Quizzler());
 }
 
@@ -38,7 +38,7 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
   int score = 0;
-  double percent = 0;
+  int percent = 0;
 
   void checkAnswer(int userPickedAnswer) {
     int correctAnswer = quizBrain.getCorrectAnswer();
@@ -81,7 +81,7 @@ class _QuizPageState extends State<QuizPage> {
       }
 
       percent = (scoreKeeper.isEmpty ? 0 : (score / scoreKeeper.length) * 100)
-          .round() as double;
+          .round();
     });
   }
 

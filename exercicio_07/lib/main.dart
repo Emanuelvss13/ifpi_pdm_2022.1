@@ -31,6 +31,41 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final ScrollController _scrollController = ScrollController();
+  int page = 1;
+  bool loading = false;
+
+  List<Album> albuns = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        setState(() {
+          page++;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<List<Album>> fetchAlbunsInfinite(int page) async {
+    for (var i = ((page - 1) * 12) + 1; i <= (page * 12); i++) {
+      final response = await http
+          .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/$i'));
+      print(i);
+      albuns.add(Album.fromJson(jsonDecode(response.body)));
+    }
+    return albuns;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,11 +73,12 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text("Album"),
       ),
       body: Center(
-          child: FutureBuilder<List>(
-        future: fetchAlbuns(),
+          child: FutureBuilder<List<Album>>(
+        future: fetchAlbunsInfinite(page),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
+                controller: _scrollController,
                 padding: const EdgeInsets.all(8),
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -72,24 +108,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-Future<dynamic> fetchAlbum() async {
-  final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+// Future<dynamic> fetchAlbum(int AlbumId) async {
+//   final response = await http
+//       .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
 
-  if (response.statusCode != 200) {
-    throw Exception('Failed to load album');
-  }
+//   if (response.statusCode != 200) {
+//     throw Exception('Failed to load album');
+//   }
 
-  return Album.fromJson(jsonDecode(response.body));
-}
+//   return Album.fromJson(jsonDecode(response.body));
+// }
 
-Future<List> fetchAlbuns() async {
-  final response =
-      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums'));
+// Future<List<dynamic>> fetchAlbuns() async {
+//   final response =
+//       await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums'));
 
-  if (response.statusCode != 200) {
-    throw Exception('Failed to load album');
-  }
+//   if (response.statusCode != 200) {
+//     throw Exception('Failed to load album');
+//   }
 
-  return jsonDecode(response.body).map((e) => Album.fromJson(e)).toList();
-}
+//   return jsonDecode(response.body).map((e) => Album.fromJson(e)).toList();
+// }
+
+

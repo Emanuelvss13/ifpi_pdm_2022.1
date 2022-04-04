@@ -34,7 +34,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final ScrollController _scrollController = ScrollController();
   int page = 1;
   bool loading = false;
-
   List<Album> albuns = [];
 
   @override
@@ -42,7 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+              _scrollController.position.maxScrollExtent &&
+          !loading) {
         setState(() {
           page++;
         });
@@ -57,12 +57,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<List<Album>> fetchAlbunsInfinite(int page) async {
+    loading = true;
+
     for (var i = ((page - 1) * 12) + 1; i <= (page * 12); i++) {
       final response = await http
           .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/$i'));
       print(i);
+
+      if (response.statusCode != 200) {
+        print("content end");
+        continue;
+      }
       albuns.add(Album.fromJson(jsonDecode(response.body)));
     }
+
+    loading = false;
     return albuns;
   }
 

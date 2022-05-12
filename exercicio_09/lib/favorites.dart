@@ -51,6 +51,25 @@ class _FavoritesState extends State<Favorites> {
           child: FutureBuilder<List<dynamic>>(
         future: fetchFavoritedCriptos(),
         builder: (context, snapshot) {
+          if (snapshot.data!.isEmpty) {
+            return Center(
+              child: Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text("As suas moedas favoritas aparecerão aqui!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 24)),
+                    Icon(
+                      Icons.star,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
+              ),
+            );
+          }
           if (snapshot.hasData) {
             return ListView.builder(
                 padding: const EdgeInsets.all(8),

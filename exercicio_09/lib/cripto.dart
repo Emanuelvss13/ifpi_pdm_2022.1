@@ -1,5 +1,5 @@
+import 'package:exercicio_07/cripto_resource.dart';
 import 'package:exercicio_07/latest_price.dart';
-import 'package:exercicio_07/percent_change.dart';
 
 class Cripto {
   final String id;
@@ -13,6 +13,7 @@ class Cripto {
   final int rank;
   final LatestPrice latestPrice;
   final String volume24h;
+  final List<CriptoResource> criptoResource;
 
   const Cripto(
       {required this.id,
@@ -25,10 +26,12 @@ class Cripto {
       required this.color,
       required this.rank,
       required this.latestPrice,
-      required this.volume24h});
+      required this.volume24h,
+      required this.criptoResource});
 
   factory Cripto.fromJson(Map<String, dynamic> json) {
     final latestPriceData = json['latest_price'] as Map<String, dynamic>;
+    final criptoResourceData = json['resource_urls'] as List<dynamic>?;
     return Cripto(
         id: json['id'],
         name: json['name'],
@@ -40,6 +43,11 @@ class Cripto {
         color: json['color'],
         rank: json['rank'],
         volume24h: json['volume_24h'],
-        latestPrice: LatestPrice.fromJson(latestPriceData));
+        latestPrice: LatestPrice.fromJson(latestPriceData),
+        criptoResource: criptoResourceData != null
+            ? criptoResourceData
+                .map((data) => CriptoResource.fromJson(data))
+                .toList()
+            : <CriptoResource>[]);
   }
 }

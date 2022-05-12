@@ -5,8 +5,10 @@ import 'package:exercicio_07/favorites.dart';
 import 'package:exercicio_07/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 final oCcy = NumberFormat("#,##0.00", "en_US");
 
@@ -31,6 +33,7 @@ class _CriptoDetailsState extends State<CriptoDetails> {
     }
 
     Cripto cripto = Cripto.fromJson(jsonDecode(response.body)['data'][0]);
+    print(jsonDecode(response.body)['data'][0]);
     return cripto;
   }
 
@@ -188,12 +191,15 @@ class _CriptoDetailsState extends State<CriptoDetails> {
                         const SizedBox(
                           height: 15,
                         ),
-                        Text(snapshot.data!.description!,
+                        Text(snapshot.data!.description ?? '',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontSize: 18,
                                 height: 1.25,
                                 color: Colors.white)),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         const SizedBox(
                           height: 15,
                         ),

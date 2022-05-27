@@ -80,7 +80,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 }),
             CheckboxListTile(
               title: const Text("Aceitar todos"),
-              value: terms[0] && terms[1] && terms[2],
+              value: terms[0] && terms[1] && terms[2]
+                  ? true
+                  : terms.contains(true)
+                      ? null
+                      : false,
+              tristate: true,
               onChanged: (bool? value) {
                 setState(() {
                   terms[0] = value!;

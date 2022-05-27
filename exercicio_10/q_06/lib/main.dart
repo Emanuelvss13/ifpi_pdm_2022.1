@@ -9,25 +9,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.yellow,
-      ),
-      home: const MyHomePage(),
+    return const MaterialApp(
+      title: 'Pesquisa',
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  static const List<String> pokemons = <String>[
+class _HomePageState extends State<HomePage> {
+  static const List<String> _pokemons = <String>[
     'bulbasaur',
     'ivysaur',
     'venusaur',
@@ -40,32 +37,74 @@ class _MyHomePageState extends State<MyHomePage> {
     'pikachu',
   ];
 
+  List<String> _foundPokemons = [];
+  @override
+  initState() {
+    _foundPokemons = _pokemons;
+    super.initState();
+  }
+
+  void _filter(String enteredKeyword) {
+    List<String> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = _pokemons;
+    } else {
+      results = _pokemons
+          .where((pokemon) =>
+              pokemon.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      _foundPokemons = results;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Pokemon´s",
-          style: TextStyle(color: Colors.blue),
-        ),
+        title: const Text('Pesquisa'),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(10),
         child: Column(
-          children: <Widget>[
-            const Spacer(),
-            SizedBox(
-              width: 400,
-              child: Autocomplete<String>(
-                  optionsBuilder: (TextEditingValue textEditingValue) {
-                if (textEditingValue.text == '') {
-                  return const Iterable<String>.empty();
-                }
-                return pokemons.where((String option) {
-                  return option.contains(textEditingValue.text.toLowerCase());
-                });
-              }),
+          children: [
+            const SizedBox(
+              height: 20,
             ),
-            const Spacer()
+            Autocomplete<String>(
+                optionsBuilder: (TextEditingValue textEditingValue) {
+              _filter(textEditingValue.text);
+              if (textEditingValue.text == '') {
+                return const Iterable<String>.empty();
+              }
+
+              return _pokemons.where((option) {
+                return option.contains(textEditingValue.text.toLowerCase());
+              });
+            }),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: _foundPokemons.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: _foundPokemons.length,
+                      itemBuilder: (context, index) => Card(
+                        color: Colors.amberAccent,
+                        elevation: 4,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: ListTile(
+                          title: Text(_foundPokemons[index]),
+                        ),
+                      ),
+                    )
+                  : const Text(
+                      'Não encontrado',
+                      style: TextStyle(fontSize: 24),
+                    ),
+            ),
           ],
         ),
       ),

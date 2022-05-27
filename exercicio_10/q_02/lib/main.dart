@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
         focusNode: focusNode,
         onKey: (event) {
           if (event is RawKeyDownEvent) {
-            if (event.isKeyPressed(LogicalKeyboardKey.arrowUp)) {
+            if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
               focusNodeTextField.nextFocus();
             }
           }
@@ -61,20 +61,28 @@ class _MyHomePageState extends State<MyHomePage> {
             title: const Text("Text Box!"),
           ),
           body: Center(
-              child: Column(
-            children: [
-              const TextField(
-                autofocus: true,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              TextField(),
-              const SizedBox(
-                height: 30,
-              ),
-              TextField(focusNode: focusNodeTextField),
-            ],
+              child: SizedBox(
+            width: 500,
+            child: Column(
+              children: [
+                const TextField(
+                  textInputAction: TextInputAction.none,
+                  autofocus: true,
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                const TextField(
+                  textInputAction: TextInputAction.none,
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                TextField(
+                    textInputAction: TextInputAction.none,
+                    focusNode: focusNodeTextField),
+              ],
+            ),
           )),
         ));
   }

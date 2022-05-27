@@ -4,7 +4,7 @@ import 'package:exercicio_11/domain/entities/character.dart';
 import 'package:exercicio_11/domain/repositories/ricky_and_morty_repository.dart';
 
 class GetRandomCharacter {
-  final RickyAndMortyRepository repository;
+  final RickAndMortyRepository repository;
 
   GetRandomCharacter(this.repository);
 

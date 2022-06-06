@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:exercicio_11/core/usecases/usecase.dart';
 import 'package:exercicio_11/domain/entities/character.dart';
 import 'package:exercicio_11/domain/repositories/ricky_and_morty_repository.dart';
 import 'package:exercicio_11/domain/use-cases/get_character_by_name.dart';
@@ -45,7 +46,7 @@ void main() {
       when(mockRickAndMortyRepository.getCharacterByName(characterNameToSearch))
           .thenAnswer((_) async => Right(tCharacters[0]));
 
-      final result = await usecase.execute(name: characterNameToSearch);
+      final result = await usecase(Params(name: characterNameToSearch));
 
       // assert
       expect(result, Right(tCharacters[0]));

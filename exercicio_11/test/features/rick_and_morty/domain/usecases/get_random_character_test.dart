@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:exercicio_11/core/usecases/usecase.dart';
 import 'package:exercicio_11/domain/entities/character.dart';
 import 'package:exercicio_11/domain/repositories/ricky_and_morty_repository.dart';
 import 'package:exercicio_11/domain/use-cases/get_random_character.dart';
@@ -34,7 +35,7 @@ void main() {
       when(mockRickAndMortyRepository.getRandomCharacter())
           .thenAnswer((_) async => const Right(tCharacter));
 
-      final result = await usecase.execute();
+      final result = await usecase(NoParams());
 
       // assert
       expect(result, const Right(tCharacter));

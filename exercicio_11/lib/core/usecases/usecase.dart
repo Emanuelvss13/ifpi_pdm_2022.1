@@ -7,7 +7,10 @@ abstract class UseCase<Type, Params> {
 }
 
 class Params extends Equatable {
-  late final String name;
+  final String name;
+
+  const Params({required this.name});
+
   @override
   List<Object> get props => [name];
 }

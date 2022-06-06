@@ -35,4 +35,21 @@ void main() {
       expect(result, characterModel);
     },
   );
+
+  test(
+    'should return a JSON map containing the proper data',
+    () async {
+      final result = characterModel.toJson();
+      final expectedJsonMap = {
+        "id": 1,
+        "name": "Rick Sanchez",
+        "status": "Alive",
+        "species": "Human",
+        "type": "",
+        "gender": "Male",
+        "image": "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+      };
+      expect(result, expectedJsonMap);
+    },
+  );
 }

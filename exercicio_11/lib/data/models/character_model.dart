@@ -28,4 +28,16 @@ class CharacterModel extends Character {
         species: json['species'],
         image: json['image']);
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'type': type,
+      'gender': gender,
+      'status': status,
+      'species': species,
+      'image': image
+    };
+  }
 }

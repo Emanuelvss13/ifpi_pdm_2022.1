@@ -1,6 +1,6 @@
-import 'package:exercicio_11/domain/entities/character.dart';
+import 'package:exercicio_11/data/models/character_model.dart';
 
 abstract class RickAndMortyRemoteDatasource {
-  Future<Character> getCharacterByName(String name);
-  Future<Character> getRandomCharacter();
+  Future<CharacterModel> getCharacterByName(String name);
+  Future<CharacterModel> getRandomCharacter();
 }

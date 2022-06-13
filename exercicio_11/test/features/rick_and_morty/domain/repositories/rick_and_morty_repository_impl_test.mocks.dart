@@ -56,8 +56,13 @@ class MockRickAndMortyLocalDatasource extends _i1.Mock
   }
 
   @override
-  _i5.Future<_i3.Character> getLastCharacter() =>
-      (super.noSuchMethod(Invocation.method(#getLastCharacter, []),
+  _i5.Future<_i3.Character> getCharacterByName(String? name) =>
+      (super.noSuchMethod(Invocation.method(#getCharacterByName, [name]),
+              returnValue: Future<_i3.Character>.value(_FakeCharacter()))
+          as _i5.Future<_i3.Character>);
+  @override
+  _i5.Future<_i3.Character> getRandomCharacter() =>
+      (super.noSuchMethod(Invocation.method(#getRandomCharacter, []),
               returnValue: Future<_i3.Character>.value(_FakeCharacter()))
           as _i5.Future<_i3.Character>);
   @override

@@ -76,8 +76,45 @@ void main() {
           final result = await repository.getCharacterByName(tName);
           // assert
           verify(mockRemoteDataSource.getCharacterByName(tName));
-          // verifyZeroInteractions(mockLocalDataSource);
           expect(result, equals(Left(ServerFailure())));
+        },
+      );
+    });
+
+    group('device is offline', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      });
+      test('should check if the device is offline', () {
+        verifyNever(
+          mockNetworkInfo.isConnected,
+        );
+      });
+      test(
+        'should return remote data when the call to remote data source is successful',
+        () async {
+          // arrange
+          when(mockLocalDataSource.getCharacterByName(tName))
+              .thenAnswer((_) async => tCharacterModel);
+          // act
+          final result = await repository.getCharacterByName(tName);
+          // assert
+          verify(mockLocalDataSource.getCharacterByName(tName));
+          expect(result, equals(const Right(tCharacter)));
+        },
+      );
+
+      test(
+        'should return server failure when the call to remote data source is unsuccessful',
+        () async {
+          // arrange
+          when(mockLocalDataSource.getCharacterByName(tName))
+              .thenThrow(CacheException());
+          // act
+          final result = await repository.getCharacterByName(tName);
+          // assert
+          verify(mockLocalDataSource.getCharacterByName(tName));
+          expect(result, equals(Left(CacheFailure())));
         },
       );
     });

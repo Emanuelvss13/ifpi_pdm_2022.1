@@ -31,7 +31,7 @@ class RickAndMortyRepositoryImpl implements RickAndMortyRepository {
     } else {
       try {
         final localCharacter =
-            await rickAndMortyLocalDatasource.getLastCharacter();
+            await rickAndMortyLocalDatasource.getCharacterByName(name);
         return Right(localCharacter);
       } on CacheException {
         return Left(CacheFailure());
@@ -53,7 +53,7 @@ class RickAndMortyRepositoryImpl implements RickAndMortyRepository {
     } else {
       try {
         final localCharacter =
-            await rickAndMortyLocalDatasource.getLastCharacter();
+            await rickAndMortyLocalDatasource.getRandomCharacter();
         return Right(localCharacter);
       } on CacheException {
         return Left(CacheFailure());

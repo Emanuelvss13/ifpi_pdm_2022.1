@@ -91,7 +91,7 @@ void main() {
         );
       });
       test(
-        'should return remote data when the call to remote data source is successful',
+        'should return character data when the call to local data source is successful',
         () async {
           // arrange
           when(mockLocalDataSource.getCharacterByName(tName))
@@ -105,7 +105,7 @@ void main() {
       );
 
       test(
-        'should return server failure when the call to remote data source is unsuccessful',
+        'should return cache failure when the call to local data source is unsuccessful',
         () async {
           // arrange
           when(mockLocalDataSource.getCharacterByName(tName))
@@ -114,6 +114,83 @@ void main() {
           final result = await repository.getCharacterByName(tName);
           // assert
           verify(mockLocalDataSource.getCharacterByName(tName));
+          expect(result, equals(Left(CacheFailure())));
+        },
+      );
+    });
+  });
+  group('getRandomCharacter', () {
+    group('device is online', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      });
+      test('should check if the device is online', () {
+        verifyNever(
+          mockNetworkInfo.isConnected,
+        );
+      });
+      test(
+        'should return remote data when the call to remote data source is successful',
+        () async {
+          // arrange
+          when(mockRemoteDataSource.getRandomCharacter())
+              .thenAnswer((_) async => tCharacterModel);
+          // act
+          final result = await repository.getRandomCharacter();
+          // assert
+          verify(mockRemoteDataSource.getRandomCharacter());
+          expect(result, equals(const Right(tCharacter)));
+        },
+      );
+
+      test(
+        'should return server failure when the call to remote data source is unsuccessful',
+        () async {
+          // arrange
+          when(mockRemoteDataSource.getRandomCharacter())
+              .thenThrow(ServerException());
+          // act
+          final result = await repository.getRandomCharacter();
+          // assert
+          verify(mockRemoteDataSource.getRandomCharacter());
+          expect(result, equals(Left(ServerFailure())));
+        },
+      );
+    });
+
+    group('device is offline', () {
+      setUp(() {
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      });
+      test('should check if the device is offline', () {
+        verifyNever(
+          mockNetworkInfo.isConnected,
+        );
+      });
+      test(
+        'should return character data when the call to local data source is successful',
+        () async {
+          // arrange
+          when(mockLocalDataSource.getRandomCharacter())
+              .thenAnswer((_) async => tCharacterModel);
+          // act
+          final result = await repository.getRandomCharacter();
+          // assert
+          verify(mockLocalDataSource.getRandomCharacter());
+          expect(result, equals(const Right(tCharacter)));
+        },
+      );
+
+      test(
+        'should return chache failure when the call to local data source is unsuccessful',
+        () async {
+          // arrange
+          when(mockLocalDataSource.getRandomCharacter())
+              .thenThrow(CacheException());
+          // act
+          final result = await repository.getRandomCharacter();
+          // assert
+          verify(mockLocalDataSource.getRandomCharacter());
           expect(result, equals(Left(CacheFailure())));
         },
       );

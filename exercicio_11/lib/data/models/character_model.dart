@@ -18,6 +18,17 @@ class CharacterModel extends Character {
             gender: gender,
             image: image);
 
+  factory CharacterModel.fromJsonByName(Map<String, dynamic> json) {
+    return CharacterModel(
+        id: json['results'][0]['id'],
+        name: json['results'][0]['name'],
+        type: json['results'][0]['type'],
+        status: json['results'][0]['status'],
+        gender: json['results'][0]['gender'],
+        species: json['results'][0]['species'],
+        image: json['results'][0]['image']);
+  }
+
   factory CharacterModel.fromJson(Map<String, dynamic> json) {
     return CharacterModel(
         id: json['id'],

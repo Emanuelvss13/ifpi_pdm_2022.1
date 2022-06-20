@@ -31,7 +31,7 @@ class RickAndMortyRepositoryImpl implements RickAndMortyRepository {
     } else {
       try {
         final localCharacter =
-            await rickAndMortyLocalDatasource.getCharacterByName(name);
+            await rickAndMortyLocalDatasource.getRandomCharacter();
         return Right(localCharacter);
       } on CacheException {
         return Left(CacheFailure());
